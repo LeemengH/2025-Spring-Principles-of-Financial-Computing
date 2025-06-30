@@ -1,0 +1,23 @@
+Parameter Definition:
+- compounded_r1 = r1 / m
+- compounded_r2 = r2 / m
+- compounded_times = n * m
+- a1 = compounded_r1 / (1 - (1 + compounded_r1)^(-compounded_times))
+  (Define a1 to make the formula for loan payments (principal and interest) cleaner.)
+
+Step 1: Calculate V1
+  The maximum loan amount occurs when the payment for the loan equals the interest gain.
+  1. Payment for loan = V1 * (compounded_r1) / (1 - (1 + compounded_r1)^(-compounded_times)) = V1 * a1
+  2. Interest gain = (C + V1) * (1 + compounded_r2)
+     -> V1 = compounded_r2 * C / (a1 - compounded_r2)
+
+Step 2: Calculate Total Interest Paid & Total Interest Received
+  - Total_interest_paid = V1 * (a1 * compounded_times - 1)
+  - Total_interest_received = (C + V1) * (r2 * n)
+
+Step 3: Calculate IRR
+  - IRR = (fv / pv)^(1/period) - 1
+  - Annualized_IRR = IRR * m
+    -> Annualized_IRR = ((fv / pv)^(1/compounded_times) - 1) * m
+
+Step 4: Print All Outputs

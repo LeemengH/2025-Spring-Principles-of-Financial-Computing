@@ -1,0 +1,44 @@
+Step1: Preprocessing & Tree Parameters
+    - Convert days to years.
+    - Calculate Up / Down factor.
+    - Calculate Risk-neutral up probability.
+    - Calculate Discount factor.
+    ...
+
+Step2: Build the Tree
+    For each time step i, and node j (number of up moves):
+        ```
+        stock_tree[i][j] = S * u^j * d^(i - j)
+        ```
+
+Step3: Terminal Payoff (at maturity)
+    We set the option payoff at the final step (i = n), depending on whether the barrier H was breached:
+        ```
+        if stock_price >= H:
+            value = 0 if up-and-out else intrinsic value
+        else:
+            value = intrinsic value
+        ```
+        - For up-and-out, if price hits the barrier, the option is worth zero.
+        - For up-and-in, the option value is non-zero only if the barrier was breached earlier, which we compute later by subtraction.
+
+Step4: Backward Induction
+    We roll back the tree from n-1 to 0, using the risk-neutral valuation:
+    ```
+    expected value = disc * (p * value_up + (1 - p) * value_down)
+    if stock_price >= H:
+        value = 0 if up-and-out else expected value
+    else:
+        value = expected discounted value
+    ```
+    Where:
+        value_up is the node above to the right (i+1, j+1)
+        value_down is the node above to the left (i+1, j)
+
+Step5: Compute Up-and-In Options
+    Instead of building a second tree for up-and-in options, we use a relationship:
+        Vanilla Option = Up-and-In + Up-and-Out
+    So:
+        up-in = vanilla - up-out
+        
+    This saves computation and avoids redundant tree building.

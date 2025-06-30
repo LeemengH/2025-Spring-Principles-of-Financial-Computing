@@ -1,0 +1,98 @@
+# Binomial–Trinomial Tree for Pricing Double‑Barrier Options
+
+This document describes the step‑by‑step procedure implemented in `R13922165_HW_4.py` to price **up‑and‑out / down‑and‑out double‑barrier European options** using a binomial–trinomial lattice that exactly aligns with the two barriers.
+
+---
+
+## 1  Parse Input Parameters
+
+* Read
+
+  ```
+  S, X, r, σ, T_days, H, L, k
+  ```
+* Convert maturity from days to years
+
+  ```
+  T = T_days / 365
+  ```
+
+---
+
+## 2  Set Up/Down Factors and the Primary Time Step Δt
+
+To ensure the barriers match the tree exactly, the distance from **L** to **H** must be reached in 2k consecutive up moves.
+
+---
+
+## 3  Determine Total Periods *N* and the First Step Δt′
+
+* Preliminary count: $N = \lfloor T / Δt \rfloor$ (minimum 1).
+* Make the total timeline fit exactly:
+
+  Δt' = T - (N - 1)\,Δt.
+
+The first period has length Δt′; the remaining $N-1$ periods are of length Δt.
+
+---
+
+## 4  Risk‑Neutral Probabilities
+
+### 4.1 Binary Steps (length Δt)
+
+
+### 4.2 First Trinomial Step (length Δt′)
+
+Solve for p_u, p_m, p_d by matching the first two moments:
+
+---
+
+## 5  Forward Construction of the Price Tree
+
+1. **Root** at time 0 with price *S*.
+2. **First layer** (trinomial): prices $S d',\; S,\; S u'$.
+3. **Remaining $N-1$ layers** (binary): price multiplies by $u$ or $d$ each step.
+4. **Barrier check**: if a node price $\ge H$ or $\le L$, mark its path as *knocked out*; all future payoffs on that path are zero.
+
+---
+
+## 6  Terminal Payoff
+
+* **Call** : max(S_T - X,0).
+* **Put**  : max(X - S_T,0).
+* Payoff is set to 0 on all knocked‑out paths.
+
+---
+
+## 7  Backward Induction (Discounting)
+
+From maturity back to the root
+---
+
+## 8  Option Value at t = 0
+
+The value obtained at the root node is the option price:
+
+* `call_price` for the call option.
+* `put_price`  for the put option.
+
+---
+
+## 9  Delta Estimation
+
+1. Re‑price with
+
+   ```
+   S_up   = 1.01 × S
+   S_down = 0.99 × S
+   ```
+2. Finite‑difference approximation
+---
+
+## 10  Output Format
+
+Print four comma‑separated numbers, each to six decimal places:
+
+```
+<call_price>, <call_delta>, <put_price>, <put_delta>
+```

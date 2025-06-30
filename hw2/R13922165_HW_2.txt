@@ -1,0 +1,13 @@
+Parameter Definition:
+    1. T denote the time to expiration of the option measured in years.
+    2. N denote the total time steps.
+    3. dt means each period is delta t years long.
+    4. To make nodes at the same horizontal level of the tree hvae identical price). By page 299, Let u = e^(sigma*((delta t)^(1/2))).
+    5. The pseudo probability p = (R - d) / (u - d) (Note: The period gross return R is e^(r*dt)).
+    6. The discount is e^(-r * dt).
+
+Step 1: Initialization
+  - Initialze the asset price, C and P in the tree.
+
+Step 2: Backward Induction
+  - check the early excise condition based on early exercise dates. 
